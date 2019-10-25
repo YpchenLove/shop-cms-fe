@@ -3,27 +3,23 @@
     <el-dropdown>
       <span class="el-dropdown-link">
         <div class="nav-avatar">
-          <img :src="user.avatar || defaultAvatar" alt="头像">
+          <img :src="user.avatar || defaultAvatar" alt="头像" />
         </div>
       </span>
       <el-dropdown-menu slot="dropdown" class="user-box">
         <div class="user-info">
           <div class="avatar" title="点击修改头像">
-            <img :src="user.avatar || defaultAvatar" alt="头像">
+            <img :src="user.avatar || defaultAvatar" alt="头像" />
             <label class="mask">
               <i class="iconfont icon-icon-test" style="font-size: 20px;"></i>
-              <input
-                ref="avatarInput"
-                type="file"
-                accept="image/*"
-                @change="fileChange" />
+              <input ref="avatarInput" type="file" accept="image/*" @change="fileChange" />
             </label>
           </div>
           <div class="text">
-            <div class="username">{{ nickname }}</div>
+            <div class="username">{{ username }}</div>
             <div class="desc">{{ title }}</div>
           </div>
-          <img src="../../assets/img/user/corner.png" class="corner">
+          <img src="../../assets/img/user/corner.png" class="corner" />
         </div>
         <ul class="dropdown-box">
           <li class="password" @click="changePassword">
@@ -45,7 +41,8 @@
       :append-to-body="true"
       :close-on-click-modal="false"
       custom-class="croppa-dialog"
-      center>
+      center
+    >
       <div style="text-align: center;">
         <div class="avatar-croppa-container">
           <croppa
@@ -61,8 +58,8 @@
             :disable-scroll-to-zoom="false"
             :show-loading="true"
             :quality="quality"
-            :initial-image="cropImg">
-          </croppa>
+            :initial-image="cropImg"
+          ></croppa>
         </div>
         <div style="margin-top: 1em;">通过鼠标滚轮调节头像大小</div>
       </div>
@@ -76,7 +73,8 @@
       :append-to-body="true"
       :before-close="handleClose"
       :visible.sync="dialogFormVisible"
-      class="user-dialog">
+      class="user-dialog"
+    >
       <el-form
         :model="form"
         status-icon
@@ -84,7 +82,8 @@
         label-position="left"
         ref="form"
         label-width="90px"
-        @submit.native.prevent>
+        @submit.native.prevent
+      >
         <el-form-item label="原始密码" prop="old_password">
           <el-input type="password" v-model="form.old_password" autocomplete="off"></el-input>
         </el-form-item>
@@ -100,7 +99,6 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-
   </div>
 </template>
 
@@ -150,7 +148,7 @@ export default {
       }
     }
     return {
-      nickname: null,
+      username: null,
       dialogFormVisible: false,
       form: {
         old_password: '',
@@ -284,27 +282,31 @@ export default {
           data: {
             avatar: res[0].path,
           },
-        }).then((res) => { // eslint-disable-line
-          if (res.error_code === 0) {
-            this.$message({
-              type: 'success',
-              message: '更新头像成功',
-            })
-            this.cropVisible = false
-            // 触发重新获取用户信息
-            return User.getInformation()
-          }
-          return Promise.reject(new Error('更新头像失败'))
-        }).then((res) => { // eslint-disable-line
-          // 尝试获取当前用户信息
-          const user = res
-          this.setUserAndState(user)
         })
+          .then((res) => {
+            // eslint-disable-line
+            if (res.error_code === 0) {
+              this.$message({
+                type: 'success',
+                message: '更新头像成功',
+              })
+              this.cropVisible = false
+              // 触发重新获取用户信息
+              return User.getInformation()
+            }
+            return Promise.reject(new Error('更新头像失败'))
+          })
+          .then((res) => {
+            // eslint-disable-line
+            // 尝试获取当前用户信息
+            const user = res
+            this.setUserAndState(user)
+          })
       })
     },
     init() {
       const { user } = this.$store.state
-      this.nickname = user ? user.nickname : '未登录'
+      this.username = user ? user.username : '未登录'
     },
     changePassword() {
       this.dialogFormVisible = true
@@ -319,7 +321,11 @@ export default {
       window.location.reload(true)
     },
     submitForm(formName) {
-      if (this.form.old_password === '' && this.form.new_password === '' && this.form.confirm_password === '') {
+      if (
+        this.form.old_password === ''
+        && this.form.new_password === ''
+        && this.form.confirm_password === ''
+      ) {
         this.dialogFormVisible = false
         return
       }
@@ -389,7 +395,7 @@ export default {
   border: none;
 
   .user-info {
-    background-image: url("../../assets/img/user/user-bg.png");
+    background-image: url('../../assets/img/user/user-bg.png');
     background-size: 100% 100%;
     transform: translateY(-10px);
     border-top-left-radius: 4px;
@@ -418,13 +424,13 @@ export default {
 
       .mask {
         opacity: 0;
-        transition: all .2s;
+        transition: all 0.2s;
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, .3);
+        background: rgba(0, 0, 0, 0.3);
         display: flex;
         justify-content: center;
         align-items: center;
